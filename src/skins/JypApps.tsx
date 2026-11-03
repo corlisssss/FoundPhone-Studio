@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Heart, MessageCircle, Send, Plus, ChevronLeft, Users, CalendarDays, Radio, Image as ImageIcon } from "lucide-react";
+import { useState, type CSSProperties } from "react";
+import { Heart, MessageCircle, Send, Plus, CalendarDays, Radio } from "lucide-react";
 import { useSkinState } from "../skinState";
 import type { SkinProps } from "../AppSkins";
 
@@ -17,11 +17,11 @@ const initialEntries: Entry[] = [
   { id:"welcome3", room:"NSWER_0413", from:"NSWER_0413", body:"지우 셀카 기다리는 중… 🥹", time:"오후 2:03", mine:false },
 ];
 
-const shell: React.CSSProperties = { height:"100%", minHeight:480, display:"flex", flexDirection:"column", background:"#f7f7fa", color:"#24242a", fontFamily:"inherit" };
-const top: React.CSSProperties = { padding:"16px", background:"#fff", borderBottom:"1px solid #eee", display:"flex", alignItems:"center", justifyContent:"space-between" };
-const pill: React.CSSProperties = { border:0, borderRadius:20, padding:"9px 13px", background:"#f0e6ec", color:"#9d5476", fontWeight:700, cursor:"pointer" };
-const field: React.CSSProperties = { flex:1, minWidth:0, border:"1px solid #e5e5eb", borderRadius:22, padding:"11px 14px", background:"#fff", color:"#222", outline:"none" };
-const button: React.CSSProperties = { border:0, borderRadius:20, padding:"10px 14px", background:"#d987aa", color:"#fff", fontWeight:700, cursor:"pointer" };
+const shell: CSSProperties = { height:"100%", minHeight:480, display:"flex", flexDirection:"column", background:"#f7f7fa", color:"#24242a", fontFamily:"inherit" };
+const top: CSSProperties = { padding:"16px", background:"#fff", borderBottom:"1px solid #eee", display:"flex", alignItems:"center", justifyContent:"space-between" };
+const pill: CSSProperties = { border:0, borderRadius:20, padding:"9px 13px", background:"#f0e6ec", color:"#9d5476", fontWeight:700, cursor:"pointer" };
+const field: CSSProperties = { flex:1, minWidth:0, border:"1px solid #e5e5eb", borderRadius:22, padding:"11px 14px", background:"#fff", color:"#222", outline:"none" };
+const button: CSSProperties = { border:0, borderRadius:20, padding:"10px 14px", background:"#d987aa", color:"#fff", fontWeight:700, cursor:"pointer" };
 
 export function BubbleSkin(p: SkinProps) {
   const [mode,setMode] = useState<"subscription"|"artist">("subscription");
@@ -104,7 +104,7 @@ export function FansSkin(p: SkinProps) {
     <main style={{padding:14,overflowY:"auto",flex:1}}>
       {tab==="홈"||tab==="커뮤니티"?<>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}><div style={{width:42,height:42,borderRadius:50,background:"#e8e9f4",display:"grid",placeItems:"center",color:"#59618d",fontWeight:800}}>N</div><div><b>NMIXX</b><div style={{fontSize:11,color:"#999"}}>Official Artist Community</div></div></div>
-        {p.creator&&<div style={{background:"#fff",padding:12,borderRadius:14,marginBottom:14}}><b>지우</b><textarea value={draft} onChange={e=>setDraft(e.target.value)} placeholder="엔써에게 전할 이야기를 남겨주세요" style={{width:"100%",minHeight:68,border:"1px solid #eee",borderRadius:10,padding:9,marginTop:8,resize:"vertical",background:"#fff",color:"#222"}}/><button onClick={addPost} style={{...button,marginTop:8}}><Plus size={14}/> 게시하기</button></div>}
+        <div style={{background:"#fff",padding:12,borderRadius:14,marginBottom:14}><b>지우</b><textarea value={draft} onChange={e=>setDraft(e.target.value)} placeholder="엔써에게 전할 이야기를 남겨주세요" style={{width:"100%",minHeight:68,border:"1px solid #eee",borderRadius:10,padding:9,marginTop:8,resize:"vertical",background:"#fff",color:"#222"}}/><button onClick={addPost} style={{...button,marginTop:8}}><Plus size={14}/> 게시하기</button></div>}
         {posts.map(post=><article key={post.id} style={{background:"#fff",padding:13,borderRadius:14,marginBottom:12}}>
           <div style={{display:"flex",justifyContent:"space-between"}}><b>지우</b><small style={{color:"#999"}}>NMIXX · 아티스트</small></div>
           <p style={{lineHeight:1.55}}>{post.body}</p>
