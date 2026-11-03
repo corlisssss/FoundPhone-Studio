@@ -1563,9 +1563,21 @@
         {
           "event": "read",
           "target": "note-yuna-draft"
+        },
+        {
+          "event": "like",
+          "target": "ig-yuna-story"
+        },
+        {
+          "event": "callAnswered",
+          "target": "call-yuna"
+        },
+        {
+          "choose": "ending-rainy-walk",
+          "target": ""
         }
       ],
-      "ending": "",
+      "ending": "천천히 함께 걷는 밤: 지우는 당장 답을 정하지 않고 윤아의 손을 잡는다. 성수동의 가로등 아래 두 사람은 서두르지 않고 서로의 마음을 확인한다.",
       "expectUnlocked": [
         "ig-yuna-close-friends",
         "note-yuna-draft",
