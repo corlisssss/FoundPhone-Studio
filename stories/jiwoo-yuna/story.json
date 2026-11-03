@@ -3,7 +3,7 @@
   "id": "jiwoo-yuna-romance",
   "title": "오늘도 너를 좋아해",
   "description": "김지우의 휴대폰에서 카카오톡, 통화, 사진, 메모, 일정과 SNS를 탐색하며 설윤아와의 가상 로맨스를 이어 가는 장기형 인터랙티브 스토리. 선택과 발견에 따라 새로운 에피소드와 대화, 비밀 콘텐츠가 열립니다.",
-  "revision": 2,
+  "revision": 3,
   "phone": {
     "owner": "김지우",
     "date": "2026-11-02",
@@ -42,7 +42,9 @@
     "youtube",
     "spotify",
     "netflix",
-    "kakao"
+    "kakao",
+    "bubble",
+    "fans"
   ],
   "contacts": [
     {
