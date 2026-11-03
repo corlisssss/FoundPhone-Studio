@@ -42,6 +42,7 @@ export type SkinProps = {
   items: Item[];
   creator: boolean;
   onRead: (id: string) => void;
+  onEvent?: (event: string, target: string) => void;
   onItem: (i: Item) => void;
   onAdd: () => void;
   onBack: () => void;
