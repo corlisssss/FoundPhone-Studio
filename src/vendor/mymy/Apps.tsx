@@ -173,7 +173,6 @@ export function MymyKakao(p: SkinProps) {
               e.preventDefault();
               if (draft.trim()) {
                 const text = draft.trim();
-                const lower = text.toLowerCase();
                 const reply =
                   p.thread === "윤아언니"
                     ? /보고 싶|그리워|좋아|사랑|설레|언니/.test(text)
@@ -182,7 +181,7 @@ export function MymyKakao(p: SkinProps) {
                         ? "지우가 먹고 싶은 걸로 하자. 오늘은 내가 맛있는 곳 찾아둘게 ㅎㅎ"
                         : /연습|힘들|피곤|아파/.test(text)
                           ? "오늘도 고생했어. 무리하지 말고 쉬어. 필요하면 언제든 나한테 말해."
-                          : "응, 지우야 ㅎㅎ 나 지금 네 메시지 보고 웃고 있어. 조금 더 얘기할래?";
+                          : "응, 지우야 ㅎㅎ 나 지금 네 메시지 보고 웃고 있어. 조금 더 얘기할래?"
                     : p.thread === "엔믹스 단체방"
                       ? /밥|먹|떡볶이/.test(text)
                         ? "ㅋㅋㅋ 그럼 우리도 같이 가는 거죠? 지우 언니가 쏘는 거예요? 🌶️"
