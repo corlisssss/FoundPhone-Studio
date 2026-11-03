@@ -93,7 +93,7 @@ export function FansSkin(p: SkinProps) {
   const [likesRaw,setLikesRaw]=useSkinState<string>(p,"fansLikes","[]");
   const posts:FanPost[] = (()=>{try{return JSON.parse(postsRaw)}catch{return []}})();
   const likes:string[] = (()=>{try{return JSON.parse(likesRaw)}catch{return []}})();
-  const addPost=()=>{if(!draft.trim())return;setPostsRaw(JSON.stringify([{id:"post-"+(posts.length+1),body:draft.trim(),comments:[],likes:0},...posts]));setDraft("");setTab("커뮤니티");};
+  const addPost=()=>{if(!draft.trim())return;setPostsRaw(JSON.stringify([{id:"post-"+(posts.length+1),body:draft.trim(),comments:fanReplies(draft.trim()).slice(0,2),likes:Math.max(18,draft.trim().length*7)},...posts]));setDraft("");setTab("커뮤니티");};
   const addComment=(id:string)=>{if(!comment.trim())return;setPostsRaw(JSON.stringify(posts.map(p=>p.id===id?{...p,comments:[...p.comments,comment.trim()]}:p)));setComment("");};
   const toggleLike=(id:string)=>setLikesRaw(JSON.stringify(likes.includes(id)?likes.filter(x=>x!==id):[...likes,id]));
   return <div style={shell}>
