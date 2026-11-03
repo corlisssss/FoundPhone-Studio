@@ -1454,7 +1454,9 @@
           "key": "",
           "value": "천천히 함께 걷는 밤: 지우는 당장 답을 정하지 않고 윤아의 손을 잡는다. 성수동의 가로등 아래 두 사람은 서두르지 않고 서로의 마음을 확인한다."
         }
-      ]
+      ],
+      "event": "choose",
+      "target": "ending-rainy-walk"
     },
     {
       "id": "unlock-group-secret",
@@ -1573,8 +1575,8 @@
           "target": "call-yuna"
         },
         {
-          "choose": "ending-rainy-walk",
-          "target": ""
+          "event": "choose",
+          "target": "ending-rainy-walk"
         }
       ],
       "ending": "천천히 함께 걷는 밤: 지우는 당장 답을 정하지 않고 윤아의 손을 잡는다. 성수동의 가로등 아래 두 사람은 서두르지 않고 서로의 마음을 확인한다.",
