@@ -84,18 +84,44 @@ export function BubbleSkin(p: SkinProps) {
   </div>;
 }
 
-type FanPost = {id:string;body:string;comments:string[];likes:number};
+type FanComment = { author:string; body:string };
+type FanPost = {id:string;author:string;handle:string;body:string;comments:Array<FanComment|string>;likes:number};
+const members = [
+  {name:"지우",handle:"지우",role:"NMIXX · Artist"},
+  {name:"해언",handle:"haewon",role:"NMIXX · Leader"},
+  {name:"릴리",handle:"lily",role:"NMIXX · Vocal"},
+  {name:"뵤",handle:"bae",role:"NMIXX · Member"},
+  {name:"규진",handle:"kyujin",role:"NMIXX · Maknae"},
+  {name:"설유니_",handle:"sullyoon",role:"NMIXX · Member"},
+];
+const memberPosts:FanPost[] = [
+  {id:"member-haewon",author:"해언",handle:"haewon",body:"엔써 안녕~ 리더 출석 체크합니다 🙋‍♀️ 오늘도 멤버들이랑 열심히 연습했어요! 다들 저녁 먹었죠?",comments:[{author:"릴리",body:"언니가 먼저 밥 먹었는지 확인해야죠 ㅋㅋ"},{author:"지우",body:"해언언니 오늘도 고생했어요 💙"}],likes:934},
+  {id:"member-lily",author:"릴리",handle:"lily",body:"오늘 연습실에서 재미있는 일이 있었어요 ㅎㅎ 엔써에게도 빨리 들려주고 싶다! 🐣",comments:[{author:"규진",body:"언니 그 얘기 아직 비밀이에요 🤫"},{author:"해언",body:"릴리야 일단 스포 금지!"}],likes:1102},
+  {id:"member-bae",author:"뵤",handle:"bae",body:"뵤 왔어요오 🐥 오늘의 TMI: 연습 끝나고 간식 먹었는데 또 먹고 싶어요…",comments:[{author:"지우",body:"뵤야 우리 다음엔 같이 먹자 ㅎㅎ"},{author:"설유니_",body:"저도 같이요 🤍"}],likes:876},
+  {id:"member-kyujin",author:"규진",handle:"kyujin",body:"엔써!! 오늘 하루도 잘 보내고 있나요? 저는 언니들이랑 웃다가 하루가 다 갔어요 ㅋㅋ",comments:[{author:"해언",body:"누가 제일 웃겼는데요? 😏"},{author:"규진",body:"비밀이에요 언니 ㅎㅎ"}],likes:1204},
+  {id:"member-sullyoon",author:"설유니_",handle:"sullyoon",body:"엔써 안녕 🤍 오늘은 하늘이 예뻐서 사진을 많이 찍었어요. 다 같이 좋은 꿈 꿔요!",comments:[{author:"지우",body:"언니 사진 저도 보여주세요…!"},{author:"릴리",body:"하늘도 예쁘고 설유니도 예쁘고 🥹"}],likes:1460},
+];
+const teammateReplies=(body:string):FanComment[]=>{
+  if(/밥|먹|간식|저녁/.test(body)) return [{author:"해언",body:"지우야 밥 잘 챙겨 먹어야 해요! 리더의 당부입니다 🙋‍♀️"},{author:"뵤",body:"뭐 먹었어요?? 저도 알려줘요 ㅎㅎ"}];
+  if(/사랑|고마워|보고 싶|엔써|응원/.test(body)) return [{author:"릴리",body:"지우의 마음이 엔써에게 잘 전해졌을 거예요 💗"},{author:"규진",body:"우리 지우 최고!! 저도 응원해요 🫶"}];
+  return [{author:"해언",body:"지우야 오늘도 수고했어! 언니가 보고 있어요 😊"},{author:"설유니_",body:"지우 글 보니까 저도 힘이 나요 🤍"}];
+};
 export function FansSkin(p: SkinProps) {
   const [tab,setTab]=useState("홈");
   const [draft,setDraft]=useState("");
   const [comment,setComment]=useState("");
-  const [postsRaw,setPostsRaw]=useSkinState<string>(p,"fansPosts",JSON.stringify([{id:"official-1",body:"엔써 안녕!! 오늘도 함께해 줘서 고마워요 💙 연습 끝나고 잠깐 쉬는 중이에요!",comments:["오늘도 지우 덕분에 행복해요 🥹","밥 꼭 챙겨 먹기!!","지우 사진 더 주세요 ㅎㅎ"],likes:1280}]));
+  const [filter,setFilter]=useState("전체");
+  const [postsRaw,setPostsRaw]=useSkinState<string>(p,"fansPosts",JSON.stringify([
+    {id:"official-1",author:"지우",handle:"지우",body:"엔써 안녕!! 오늘도 함께해 줘서 고마워요 💙 연습 끝나고 잠깐 쉬는 중이에요!",comments:[{author:"엔써_별빛",body:"오늘도 지우 덕분에 행복해요 🥹"},{author:"지우바라기",body:"밥 꼭 챙겨 먹기!!"},{author:"지우",body:"엔써도 맛있는 거 먹기 약속 💙"}],likes:1280},
+    ...memberPosts
+  ]));
   const [likesRaw,setLikesRaw]=useSkinState<string>(p,"fansLikes","[]");
-  const posts:FanPost[] = (()=>{try{return JSON.parse(postsRaw)}catch{return []}})();
+  const posts:FanPost[] = (()=>{try{const v=JSON.parse(postsRaw);return Array.isArray(v)?v.map((x:any)=>({...x,author:x.author||"지우",handle:x.handle||x.author||"지우",comments:(x.comments||[]).map((c:any,i:number)=>typeof c==="string"?{author:fanNames[i%fanNames.length],body:c}:c)})):[];}catch{return memberPosts;}})();
   const likes:string[] = (()=>{try{return JSON.parse(likesRaw)}catch{return []}})();
-  const addPost=()=>{if(!draft.trim())return;setPostsRaw(JSON.stringify([{id:"post-"+(posts.length+1),body:draft.trim(),comments:fanReplies(draft.trim()).slice(0,2),likes:Math.max(18,draft.trim().length*7)},...posts]));setDraft("");setTab("커뮤니티");};
-  const addComment=(id:string)=>{if(!comment.trim())return;setPostsRaw(JSON.stringify(posts.map(p=>p.id===id?{...p,comments:[...p.comments,comment.trim()]}:p)));setComment("");};
+  const addPost=()=>{const body=draft.trim();if(!body)return;const created:FanPost={id:"post-"+Date.now(),author:"지우",handle:"지우",body,comments:teammateReplies(body),likes:0};setPostsRaw(JSON.stringify([created,...posts]));setDraft("");setTab("커뮤니티");setFilter("전체");};
+  const addComment=(id:string)=>{if(!comment.trim())return;setPostsRaw(JSON.stringify(posts.map(post=>post.id===id?{...post,comments:[...post.comments,{author:"지우",body:comment.trim()}]}:post)));setComment("");};
   const toggleLike=(id:string)=>setLikesRaw(JSON.stringify(likes.includes(id)?likes.filter(x=>x!==id):[...likes,id]));
+  const visiblePosts=filter==="전체"?posts:posts.filter(post=>post.author===filter);
   return <div style={shell}>
     <header style={top}><strong style={{fontSize:23}}>FANS</strong><span style={{fontSize:12,color:"#777"}}>NMIXX · OFFICIAL</span></header>
     <nav style={{display:"flex",justifyContent:"space-around",padding:12,background:"#fff",borderBottom:"1px solid #eee"}}>
@@ -103,15 +129,18 @@ export function FansSkin(p: SkinProps) {
     </nav>
     <main style={{padding:14,overflowY:"auto",flex:1}}>
       {tab==="홈"||tab==="커뮤니티"?<>
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}><div style={{width:42,height:42,borderRadius:50,background:"#e8e9f4",display:"grid",placeItems:"center",color:"#59618d",fontWeight:800}}>N</div><div><b>NMIXX</b><div style={{fontSize:11,color:"#999"}}>Official Artist Community · 지우</div><div style={{fontSize:11,color:"#8a7397",marginTop:3}}>멤버 프로필　지우　·　설유니_</div></div></div>
-        <div style={{background:"#fff",padding:12,borderRadius:14,marginBottom:14}><b>지우</b><textarea value={draft} onChange={e=>setDraft(e.target.value)} placeholder="엔써에게 전할 이야기를 남겨주세요" style={{width:"100%",minHeight:68,border:"1px solid #eee",borderRadius:10,padding:9,marginTop:8,resize:"vertical",background:"#fff",color:"#222"}}/><button onClick={addPost} style={{...button,marginTop:8}}><Plus size={14}/> 게시하기</button></div>}
-        {posts.map(post=><article key={post.id} style={{background:"#fff",padding:13,borderRadius:14,marginBottom:12}}>
-          <div style={{display:"flex",justifyContent:"space-between"}}><b>지우</b><small style={{color:"#999"}}>NMIXX · 아티스트</small></div>
-          <p style={{lineHeight:1.55}}>{post.body}</p>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}><div style={{width:42,height:42,borderRadius:50,background:"#e8e9f4",display:"grid",placeItems:"center",color:"#59618d",fontWeight:800}}>N</div><div><b>NMIXX</b><div style={{fontSize:11,color:"#999"}}>Official Artist Community · 지우</div><div style={{fontSize:11,color:"#8a7397",marginTop:3}}>멤버 프로필과 새 소식을 확인해 보세요</div></div></div>
+        <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:12}}>{members.map(member=><button key={member.name} onClick={()=>{setFilter(member.name);setTab("커뮤니티");}} style={{...pill,whiteSpace:"nowrap",background:filter===member.name?"#e8e9f4":"#fff",color:"#59618d",border:"1px solid #e7e7ee"}}>{member.name}</button>)}</div>
+        <div style={{background:"#fff",padding:12,borderRadius:14,marginBottom:14}}><b>지우</b><textarea value={draft} onChange={e=>setDraft(e.target.value)} placeholder="엔써에게 전할 이야기를 남겨주세요" style={{width:"100%",minHeight:68,border:"1px solid #eee",borderRadius:10,padding:9,marginTop:8,resize:"vertical",background:"#fff",color:"#222"}}/><button onClick={addPost} style={{...button,marginTop:8}}><Plus size={14}/> 게시하기</button></div>
+        <div style={{display:"flex",gap:7,marginBottom:12,flexWrap:"wrap"}}><button onClick={()=>setFilter("전체")} style={{...pill,background:filter==="전체"?"#e8e9f4":"#fff",color:"#59618d"}}>전체 게시글</button><button onClick={()=>setFilter("지우")} style={{...pill,background:filter==="지우"?"#e8e9f4":"#fff",color:"#59618d"}}>내 게시글</button></div>
+        {visiblePosts.map(post=><article key={post.id} style={{background:"#fff",padding:13,borderRadius:14,marginBottom:12}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><b>{post.author}</b><div style={{fontSize:10,color:"#999"}}>{members.find(m=>m.name===post.author)?.role||"NSWER · Fan"}</div></div><small style={{color:"#999"}}>NMIXX · FANS</small></div>
+          <p style={{lineHeight:1.55,whiteSpace:"pre-wrap"}}>{post.body}</p>
           <div style={{display:"flex",gap:16,alignItems:"center",fontSize:13,color:"#777"}}><button onClick={()=>toggleLike(post.id)} style={{border:0,background:"none",color:likes.includes(post.id)?"#df6e8c":"#777"}}><Heart size={17} fill={likes.includes(post.id)?"currentColor":"none"}/> {post.likes+(likes.includes(post.id)?1:0)}</button><span><MessageCircle size={16}/> {post.comments.length}</span></div>
-          <div style={{marginTop:10,borderTop:"1px solid #eee",paddingTop:8}}>{post.comments.map((c,i)=><p key={i} style={{fontSize:12,margin:"7px 0",color:"#555"}}><b>{fanNames[i%fanNames.length]}</b> {c}</p>)}</div>
+          <div style={{marginTop:10,borderTop:"1px solid #eee",paddingTop:8}}>{post.comments.map((c,i)=><p key={i} style={{fontSize:12,margin:"7px 0",color:"#555"}}><b>{c.author}</b> {c.body}</p>)}</div>
           <form onSubmit={e=>{e.preventDefault();addComment(post.id)}} style={{display:"flex",gap:6,marginTop:8}}><input value={comment} onChange={e=>setComment(e.target.value)} placeholder="댓글 남기기..." style={field}/><button style={button} type="submit">답글</button></form>
         </article>)}
+        {!visiblePosts.length&&<div style={{padding:20,textAlign:"center",color:"#999"}}>아직 게시글이 없어요.</div>}
       </>:tab==="스케줄"?<div style={{background:"#fff",padding:15,borderRadius:14}}><h3><CalendarDays size={18}/> NMIXX 스케줄</h3><p>11월 4일 · 음악방송 사전 녹화</p><p>11월 6일 · 공식 콘텐츠 촬영</p></div>:<div style={{background:"#fff",padding:24,borderRadius:14,textAlign:"center"}}><Radio size={32}/><h3>NMIXX LIVE</h3><p style={{color:"#888"}}>예정된 LIVE가 없어요.</p></div>}
     </main>
     <footer style={{padding:10,background:"#fff",borderTop:"1px solid #eee",display:"flex",justifyContent:"space-around",fontSize:11,color:"#777"}}><span>⌂ 홈</span><span>♡ 커뮤니티</span><span>▦ 스케줄</span><span>◉ LIVE</span></footer>
