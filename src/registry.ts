@@ -168,6 +168,8 @@ const definitions: [
   ["spotify", "Spotify", "media", "#4ca977", Music, ["音乐", "歌单"]],
   ["netflix", "Netflix", "media", "#a74d50", Film, ["影片", "我的片单"]],
   ["pinterest", "Pinterest", "social", "#b96d70", Pin, ["发现", "收藏板"]],
+  ["bubble", "bubble", "messaging", "#d987aa", MessageCircle, ["구독 중", "아티스트"]],
+  ["fans", "FANS", "social", "#626b9a", Users, ["홈", "커뮤니티", "스케줄", "LIVE"]],
   [
     "kakao",
     "KakaoTalk",
