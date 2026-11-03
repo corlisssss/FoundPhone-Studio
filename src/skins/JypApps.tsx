@@ -116,7 +116,7 @@ export function FansSkin(p: SkinProps) {
     ...memberPosts
   ]));
   const [likesRaw,setLikesRaw]=useSkinState<string>(p,"fansLikes","[]");
-  const posts:FanPost[] = (()=>{try{const v=JSON.parse(postsRaw);return Array.isArray(v)?v.map((x:any)=>({...x,author:x.author||"지우",handle:x.handle||x.author||"지우",comments:(x.comments||[]).map((c:any,i:number)=>typeof c==="string"?{author:fanNames[i%fanNames.length],body:c}:c)})):[];}catch{return memberPosts;}})();
+  const posts:FanPost[] = (()=>{try{const v=JSON.parse(postsRaw);return Array.isArray(v)?[...v.map((x:any)=>({...x,author:x.author||"지우",handle:x.handle||x.author||"지우",comments:(x.comments||[]).map((c:any,i:number)=>typeof c==="string"?{author:fanNames[i%fanNames.length],body:c}:c)})),...memberPosts.filter(seed=>!v.some((x:any)=>x.id===seed.id))]:memberPosts;}catch{return memberPosts;}})();
   const likes:string[] = (()=>{try{return JSON.parse(likesRaw)}catch{return []}})();
   const addPost=()=>{const body=draft.trim();if(!body)return;const created:FanPost={id:"post-"+Date.now(),author:"지우",handle:"지우",body,comments:teammateReplies(body),likes:0};setPostsRaw(JSON.stringify([created,...posts]));setDraft("");setTab("커뮤니티");setFilter("전체");};
   const addComment=(id:string)=>{if(!comment.trim())return;setPostsRaw(JSON.stringify(posts.map(post=>post.id===id?{...post,comments:[...post.comments,{author:"지우",body:comment.trim()}]}:post)));setComment("");};
