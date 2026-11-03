@@ -75,21 +75,33 @@ export function MymyKakao(p: SkinProps) {
           const entry: unknown = JSON.parse(raw);
           if (
             !Array.isArray(entry) ||
-            entry.length !== 3 ||
+            (entry.length !== 3 && entry.length !== 4) ||
             !entry.every((v) => typeof v === "string") ||
             entry[0] !== p.thread
           )
             return [];
+          const outgoing = makeItem({
+            id: "local-kkt-" + index,
+            title: entry[0],
+            body: entry[1],
+            time: entry[2],
+            sender: p.owner || "机主",
+            outgoing: true,
+            meta: { local: "true" },
+          });
+          const reply = entry[3];
           return [
-            makeItem({
-              id: "local-kkt-" + index,
-              title: entry[0],
-              body: entry[1],
-              time: entry[2],
-              sender: p.owner || "机主",
-              outgoing: true,
-              meta: { local: "true" },
-            }),
+            outgoing,
+            ...(typeof reply === "string" && reply
+              ? [makeItem({
+                  id: "local-kkt-reply-" + index,
+                  title: entry[0],
+                  body: reply,
+                  time: entry[2],
+                  sender: entry[0] === "윤아언니" ? "윤아언니" : "해원언니",
+                  meta: { local: "true", reply: "true" },
+                })]
+              : []),
           ];
         } catch {
           return [];
@@ -160,12 +172,31 @@ export function MymyKakao(p: SkinProps) {
             onSubmit={(e) => {
               e.preventDefault();
               if (draft.trim()) {
+                const text = draft.trim();
+                const lower = text.toLowerCase();
+                const reply =
+                  p.thread === "윤아언니"
+                    ? /보고 싶|그리워|좋아|사랑|설레|언니/.test(text)
+                      ? "나도 지우 보고 싶었어. 네 메시지는 이상하게 몇 번이고 다시 읽게 돼 🤍"
+                      : /밥|먹|떡볶이|배고/.test(text)
+                        ? "지우가 먹고 싶은 걸로 하자. 오늘은 내가 맛있는 곳 찾아둘게 ㅎㅎ"
+                        : /연습|힘들|피곤|아파/.test(text)
+                          ? "오늘도 고생했어. 무리하지 말고 쉬어. 필요하면 언제든 나한테 말해."
+                          : "응, 지우야 ㅎㅎ 나 지금 네 메시지 보고 웃고 있어. 조금 더 얘기할래?";
+                    : p.thread === "엔믹스 단체방"
+                      ? /밥|먹|떡볶이/.test(text)
+                        ? "ㅋㅋㅋ 그럼 우리도 같이 가는 거죠? 지우 언니가 쏘는 거예요? 🌶️"
+                        : "오오 지우가 먼저 보냈다!! 무슨 얘기인지 우리도 궁금해요 ㅋㅋ"
+                      : /고마|사랑|좋아/.test(text)
+                        ? "지우야 나도 고마워 💗 오늘도 우리 같이 힘내자!"
+                        : "ㅋㅋㅋ 확인했어 지우야! 이따 연습실에서 보자~";
                 setSent([
                   ...sent,
                   JSON.stringify([
                     p.thread,
-                    draft.trim(),
+                    text,
                     p.virtualTime || "09:41",
+                    reply,
                   ]),
                 ]);
                 setDraft("");
@@ -387,7 +418,11 @@ export function MymyInstagram(p: SkinProps) {
         <button
           aria-label={"点赞" + i.title}
           aria-pressed={liked.includes(i.id)}
-          onClick={() => toggle(i.id, liked, setLiked)}
+          onClick={() => {
+            const alreadyLiked = liked.includes(i.id);
+            toggle(i.id, liked, setLiked);
+            if (!alreadyLiked) p.onEvent?.("like", i.id);
+          }}
         >
           <Heart
             fill={liked.includes(i.id) ? "#ff3040" : "none"}
