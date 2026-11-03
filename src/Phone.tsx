@@ -453,6 +453,7 @@ function PhoneRuntime({
                   creator={creator}
                   state={s}
                   onRead={(id) => event("read", id)}
+                  onEvent={event}
                   onEdit={(item) => onEdit?.(app, item)}
                   onAdd={() => onAdd?.(app)}
                   onBack={() => setApp("")}
@@ -861,6 +862,7 @@ function AppContent({
   creator,
   state,
   onRead,
+  onEvent,
   onEdit,
   onAdd,
   onBack,
@@ -874,6 +876,7 @@ function AppContent({
   creator: boolean;
   state: Runtime;
   onRead: (id: string) => void;
+  onEvent: (event: string, target: string) => void;
   onEdit: (item: Item) => void;
   onAdd: () => void;
   onBack: () => void;
@@ -995,6 +998,7 @@ function AppContent({
               items={shown}
               creator={creator}
               onRead={onRead}
+              onEvent={onEvent}
               onItem={read}
               onAdd={onAdd}
               onBack={onBack}
