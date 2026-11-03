@@ -12,7 +12,8 @@ function skin<T>(load: () => Promise<T>, name: keyof T) {
   }));
 }
 const mymy = () => import("../vendor/mymy/Apps");
-export const catalogSkins = {\n  bubble: skin(jyp, "BubbleSkin"),\n  fans: skin(jyp, "FansSkin"),
+export const catalogSkins = {
+  bubble: skin(jyp, "BubbleSkin"),\n  fans: skin(jyp, "FansSkin"),
   kakao: skin(mymy, "MymyKakao"),
   instagram: skin(mymy, "MymyInstagram"),
   phone: skin(system, "PhoneSkin"),
