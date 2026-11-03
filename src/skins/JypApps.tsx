@@ -103,7 +103,7 @@ export function FansSkin(p: SkinProps) {
     </nav>
     <main style={{padding:14,overflowY:"auto",flex:1}}>
       {tab==="홈"||tab==="커뮤니티"?<>
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}><div style={{width:42,height:42,borderRadius:50,background:"#e8e9f4",display:"grid",placeItems:"center",color:"#59618d",fontWeight:800}}>N</div><div><b>NMIXX</b><div style={{fontSize:11,color:"#999"}}>Official Artist Community</div></div></div>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}><div style={{width:42,height:42,borderRadius:50,background:"#e8e9f4",display:"grid",placeItems:"center",color:"#59618d",fontWeight:800}}>N</div><div><b>NMIXX</b><div style={{fontSize:11,color:"#999"}}>Official Artist Community · 지우</div><div style={{fontSize:11,color:"#8a7397",marginTop:3}}>멤버 프로필　지우　·　설유니_</div></div></div>
         <div style={{background:"#fff",padding:12,borderRadius:14,marginBottom:14}><b>지우</b><textarea value={draft} onChange={e=>setDraft(e.target.value)} placeholder="엔써에게 전할 이야기를 남겨주세요" style={{width:"100%",minHeight:68,border:"1px solid #eee",borderRadius:10,padding:9,marginTop:8,resize:"vertical",background:"#fff",color:"#222"}}/><button onClick={addPost} style={{...button,marginTop:8}}><Plus size={14}/> 게시하기</button></div>}
         {posts.map(post=><article key={post.id} style={{background:"#fff",padding:13,borderRadius:14,marginBottom:12}}>
           <div style={{display:"flex",justifyContent:"space-between"}}><b>지우</b><small style={{color:"#999"}}>NMIXX · 아티스트</small></div>
